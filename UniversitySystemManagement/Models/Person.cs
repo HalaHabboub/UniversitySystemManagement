@@ -2,6 +2,7 @@
 
 namespace UniversitySystemManagement.Models
 {
+    // Abstract base class for inheritance - Student and Instructor inherit from this
     public abstract class Person
     {
         public int Id { get; set; }
@@ -15,6 +16,7 @@ namespace UniversitySystemManagement.Models
         [Required, EmailAddress]
         public string Email { get; set; }
 
+        // Virtual method that can be overridden by derived classes
         public virtual string FullName() => $"{FirstName} {LastName}";
     }
 }

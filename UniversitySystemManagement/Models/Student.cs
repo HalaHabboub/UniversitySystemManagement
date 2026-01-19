@@ -2,9 +2,13 @@
 
 namespace UniversitySystemManagement.Models
 {
+    // Student inherits from Person (demonstrates inheritance)
+    // Has M:M relationship with Course through Enrollment bridge table
     public class Student : Person
     {
         public DateTime EnrollmentDate { get; set; }
-        public ICollection<Enrollment> Enrollments { get; set; } // Many-to-Many
-}
+
+        // Navigation property for M:M relationship with Course
+        public ICollection<Enrollment> Enrollments { get; set; }
+    }
 }

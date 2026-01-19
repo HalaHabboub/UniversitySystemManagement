@@ -2,14 +2,20 @@
 
 namespace UniversitySystemManagement.Models
 {
+    // Department entity - demonstrates 1:M relationships
+    // One department has many instructors and many courses
     public class Department
     {
         public int DepartmentId { get; set; }
+
         [Required, MaxLength(100)]
         public string Name { get; set; }
-        public ICollection <Instructor> Instructors { get; set; } // One-to-Many
-        
-        public ICollection<Course> Courses { get; set; } // One-to-Many
-}
+
+        // Navigation property for 1:M (one department has many instructors)
+        public ICollection<Instructor> Instructors { get; set; }
+
+        // Navigation property for 1:M (one department has many courses)
+        public ICollection<Course> Courses { get; set; }
     }
 }
+
