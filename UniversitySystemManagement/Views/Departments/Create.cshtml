@@ -1,4 +1,10 @@
-﻿@model UniversitySystemManagement.Models.Department
+@model UniversitySystemManagement.Models.Department
+
+@*
+    This view uses HTML Helpers instead of Tag Helpers
+    HTML Helpers: C# methods like @Html.LabelFor(), @Html.EditorFor(), @Html.BeginForm()
+    Tag Helpers: HTML-like attributes like asp-for, asp-action (used in other controllers)
+*@
 
 @{
     ViewData["Title"] = "Create";
@@ -10,22 +16,34 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        @* Html.BeginForm() replaces <form asp-action="Create"> *@
+        @using (Html.BeginForm("Create", "Departments", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+
+            @* Html.ValidationSummary() replaces <div asp-validation-summary> *@
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+                @* Html.LabelFor() replaces <label asp-for="Name"> *@
+                @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label" })
+
+                @* Html.EditorFor() replaces <input asp-for="Name"> *@
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+
+                @* Html.ValidationMessageFor() replaces <span asp-validation-for="Name"> *@
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
-        </form>
+        }
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    @* Html.ActionLink() replaces <a asp-action="Index"> *@
+    @Html.ActionLink("Back to List", "Index")
 </div>
 
 @section Scripts {

@@ -22,8 +22,21 @@ namespace UniversitySystemManagement.Controllers
         // GET: Courses
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Courses.Include(c => c.Department).Include(c => c.Instructor);
-            return View(await applicationDbContext.ToListAsync());
+            // Fetch courses with related Department and Instructor data using eager loading
+            var courses = await _context.Courses
+                .Include(c => c.Department)
+                .Include(c => c.Instructor)
+                .ToListAsync();
+
+            // ViewData - dictionary-based, requires casting in the view
+            ViewData["Courses"] = courses;
+            ViewData["TotalCourses"] = courses.Count;
+
+            // ViewBag - dynamic wrapper around ViewData, no casting needed in view
+            ViewBag.PageTitle = "All Courses";
+            ViewBag.LastUpdated = DateTime.Now.ToString("g");
+
+            return View();
         }
 
         // GET: Courses/Details/5

@@ -1,4 +1,10 @@
-﻿@model IEnumerable<UniversitySystemManagement.Models.Department>
+@model IEnumerable<UniversitySystemManagement.Models.Department>
+
+@*
+    This view uses HTML Helpers instead of Tag Helpers
+    HTML Helpers: @Html.ActionLink(), @Html.DisplayFor(), @Html.DisplayNameFor()
+    Tag Helpers: asp-action, asp-route-id (used in other controllers)
+*@
 
 @{
     ViewData["Title"] = "Index";
@@ -7,29 +13,35 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    @* Html.ActionLink() replaces <a asp-action="Create"> *@
+    @Html.ActionLink("Create New", "Create")
 </p>
+
 <table class="table">
     <thead>
         <tr>
             <th>
+                @* Html.DisplayNameFor() gets the display name from the model property *@
                 @Html.DisplayNameFor(model => model.Name)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.DepartmentId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.DepartmentId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.DepartmentId">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @* Html.DisplayFor() displays the value formatted based on data type *@
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @* Html.ActionLink() with route values replaces <a asp-action asp-route-id> *@
+                    @Html.ActionLink("Edit", "Edit", new { id = item.DepartmentId }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.DepartmentId }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.DepartmentId })
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

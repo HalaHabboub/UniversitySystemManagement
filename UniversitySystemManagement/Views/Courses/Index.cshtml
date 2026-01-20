@@ -1,53 +1,54 @@
-﻿@model IEnumerable<UniversitySystemManagement.Models.Course>
+@* No @model directive needed - we're using ViewData/ViewBag instead of strongly-typed model *@
 
 @{
-    ViewData["Title"] = "Index";
+    // ViewBag - dynamic, no casting needed
+    ViewData["Title"] = ViewBag.PageTitle;
+
+    // ViewData - requires casting to the correct type
+    var courses = ViewData["Courses"] as IEnumerable<UniversitySystemManagement.Models.Course>;
+    var totalCourses = (int)(ViewData["TotalCourses"] ?? 0);
 }
 
-<h1>Index</h1>
+@* Display page title from ViewBag *@
+<h1>@ViewBag.PageTitle</h1>
+
+@* Display metadata using ViewBag and ViewData *@
+<p class="text-muted">
+    Total Courses: @totalCourses | Last Updated: @ViewBag.LastUpdated
+</p>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Credits)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Department)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Instructor)
-            </th>
+            <th>Title</th>
+            <th>Credits</th>
+            <th>Department</th>
+            <th>Instructor</th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Credits)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Department.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Instructor.Email)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.CourseId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.CourseId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.CourseId">Delete</a>
-            </td>
-        </tr>
-}
+        @* Loop through courses retrieved from ViewData *@
+        @if (courses != null)
+        {
+            @foreach (var item in courses)
+            {
+                <tr>
+                    <td>@item.Title</td>
+                    <td>@item.Credits</td>
+                    <td>@item.Department?.Name</td>
+                    <td>@item.Instructor?.FullName()</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.CourseId">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.CourseId">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.CourseId">Delete</a>
+                    </td>
+                </tr>
+            }
+        }
     </tbody>
 </table>

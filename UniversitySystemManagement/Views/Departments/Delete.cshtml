@@ -1,4 +1,10 @@
-﻿@model UniversitySystemManagement.Models.Department
+@model UniversitySystemManagement.Models.Department
+
+@*
+    This view uses HTML Helpers instead of Tag Helpers
+    HTML Helpers: @Html.BeginForm(), @Html.HiddenFor(), @Html.ActionLink()
+    Tag Helpers: asp-action, asp-for (used in other controllers)
+*@
 
 @{
     ViewData["Title"] = "Delete";
@@ -11,17 +17,26 @@
     <h4>Department</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
+            @* Html.DisplayNameFor() gets the label from model metadata *@
             @Html.DisplayNameFor(model => model.Name)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
+            @* Html.DisplayFor() displays the value *@
             @Html.DisplayFor(model => model.Name)
         </dd>
     </dl>
-    
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="DepartmentId" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
-    </form>
+
+    @* Html.BeginForm() replaces <form asp-action="Delete"> *@
+    @using (Html.BeginForm("Delete", "Departments", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        @* Html.HiddenFor() replaces <input type="hidden" asp-for="DepartmentId"> *@
+        @Html.HiddenFor(model => model.DepartmentId)
+
+        <input type="submit" value="Delete" class="btn btn-danger" /> 
+        @* Html.ActionLink() replaces <a asp-action="Index"> *@
+        @Html.ActionLink("Back to List", "Index")
+    }
 </div>
