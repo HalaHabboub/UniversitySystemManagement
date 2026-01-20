@@ -25,6 +25,7 @@
     <thead>
         <tr>
             <th>Title</th>
+            <th>Description</th>
             <th>Credits</th>
             <th>Department</th>
             <th>Instructor</th>
@@ -39,6 +40,7 @@
             {
                 <tr>
                     <td>@item.Title</td>
+                    <td>@item.Description</td>
                     <td>@item.Credits</td>
                     <td>@item.Department?.Name</td>
                     <td>@item.Instructor?.FullName()</td>

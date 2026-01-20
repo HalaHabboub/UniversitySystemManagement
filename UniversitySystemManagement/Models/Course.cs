@@ -12,6 +12,10 @@ namespace UniversitySystemManagement.Models
         [Required, MaxLength(100)]
         public string Title { get; set; } = string.Empty;
 
+        // Optional course description
+        [MaxLength(500)]
+        public string? Description { get; set; }
+
         // Validation: credits must be between 1 and 6
         [Required, Range(1, 6, ErrorMessage = "Credits must be between 1 and 6")]
         public int Credits { get; set; }
