@@ -11,6 +11,7 @@ namespace UniversitySystemManagement.Data
         public DbSet<UniversitySystemManagement.Models.Student> Students { get; set; }
         public DbSet<UniversitySystemManagement.Models.Course> Courses { get; set; }
         public DbSet<UniversitySystemManagement.Models.Enrollment> Enrollments { get; set; }
+        public DbSet<UniversitySystemManagement.Models.StudentCard> StudentCards { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         { 
             // IMPORTANT: Must call base for Identity tables because I am overriding OnModelCreating
@@ -29,6 +30,13 @@ namespace UniversitySystemManagement.Data
                 .HasOne(e => e.Course)
                 .WithMany(c => c.Enrollments)
                 .HasForeignKey(e => e.CourseId);
+
+            // Configure 1:1 relationship between Student and StudentCard
+            // StudentCard uses Student's primary key as both PK and FK (shared primary key)
+            modelBuilder.Entity<UniversitySystemManagement.Models.StudentCard>()
+                .HasOne(sc => sc.Student)
+                .WithOne(s => s.StudentCard)
+                .HasForeignKey<UniversitySystemManagement.Models.StudentCard>(sc => sc.StudentId);
 
         }
     }
