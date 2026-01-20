@@ -9,6 +9,6 @@ namespace UniversitySystemManagement.Models
         public DateTime EnrollmentDate { get; set; }
 
         // Navigation property for M:M relationship with Course
-        public ICollection<Enrollment> Enrollments { get; set; }
+        public ICollection<Enrollment> Enrollments { get; set; } = new List<Enrollment>();
     }
 }

@@ -14,6 +14,6 @@ namespace UniversitySystemManagement.Models
         public Department? Department { get; set; }
 
         // Navigation property for 1:M relationship (one instructor teaches many courses)
-        public ICollection<Course> Courses { get; set; }
+        public ICollection<Course> Courses { get; set; } = new List<Course>();
     }
 }

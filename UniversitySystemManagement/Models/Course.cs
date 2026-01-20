@@ -10,7 +10,7 @@ namespace UniversitySystemManagement.Models
         public int CourseId { get; set; }
 
         [Required, MaxLength(100)]
-        public string Title { get; set; }
+        public string Title { get; set; } = string.Empty;
 
         // Validation: credits must be between 1 and 6
         [Required, Range(1, 6, ErrorMessage = "Credits must be between 1 and 6")]
@@ -27,6 +27,6 @@ namespace UniversitySystemManagement.Models
         public Instructor? Instructor { get; set; }
 
         // Navigation property for M:M relationship with Student
-        public ICollection<Enrollment> Enrollments { get; set; }
+        public ICollection<Enrollment> Enrollments { get; set; } = new List<Enrollment>();
     }
 }
