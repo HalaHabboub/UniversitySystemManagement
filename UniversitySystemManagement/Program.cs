@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using UniversitySystemManagement.Data;
+using static UniversitySystemManagement.Data.RoleSeeder;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +11,12 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+// Configure ASP.NET Identity with role support
+// AddDefaultIdentity sets up user authentication (login, register, etc.)
+// AddRoles<IdentityRole> enables role-based authorization (Admin, Instructor, Student)
+builder.Services.AddDefaultIdentity<IdentityUser>(options =>
+    options.SignIn.RequireConfirmedAccount = false)  // Set to false for easier testing
+    .AddRoles<IdentityRole>()  
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
 
@@ -42,5 +48,12 @@ app.MapControllerRoute(
 
 app.MapRazorPages()
    .WithStaticAssets();
+
+// Seed roles and default admin user before the app starts
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    await SeedRolesAndAdminAsync(services);
+}
 
 app.Run();
