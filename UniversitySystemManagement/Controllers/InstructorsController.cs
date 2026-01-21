@@ -7,9 +7,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using UniversitySystemManagement.Data;
 using UniversitySystemManagement.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace UniversitySystemManagement.Controllers
 {
+    // Only Admin can manage instructors
+    [Authorize(Roles = "Admin")]
     public class InstructorsController : Controller
     {
         private readonly ApplicationDbContext _context;

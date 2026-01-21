@@ -49,45 +49,46 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <!-- ===== PUBLIC ACCESS ===== -->
+                        <!-- PUBLIC: Everyone can see Home -->
                         <li class="nav-item">
                             <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
 
-                        <!-- Courses - Public can view (Admin can manage - I'll add Create/Edit buttons in the view later) -->
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Courses" asp-action="Index">Courses</a>
-                        </li>
+                        <!-- ADMIN ONLY: Full management access -->
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-area="" asp-controller="Admin" asp-action="Dashboard">Admin Panel</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-area="" asp-controller="Courses" asp-action="Index">Courses</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-area="" asp-controller="Departments" asp-action="Index">Departments</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-area="" asp-controller="Instructors" asp-action="Index">Instructors</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-area="" asp-controller="Students" asp-action="Index">Students</a>
+                            </li>
+                        }
 
-                        <!-- ===== ADMIN ONLY (Currently visible to all - will restrict later) ===== -->
-                        <!-- TODO: Wrap in @if (User.IsInRole("Admin")) { } when roles are set up -->
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Departments" asp-action="Index">Departments</a>
-                        </li>
+                        <!-- INSTRUCTOR: Can view their students -->
+                        @if (User.IsInRole("Instructor"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-area="" asp-controller="Instructor" asp-action="Dashboard">My Dashboard</a>
+                            </li>
+                        }
 
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Instructors" asp-action="Index">Instructors</a>
-                        </li>
-
-                        <!-- ===== INSTRUCTOR & ADMIN ONLY ===== -->
-                        <!-- TODO: Wrap in @if (User.IsInRole("Admin") || User.IsInRole("Instructor")) { } -->
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Students" asp-action="Index">Students</a>
-                        </li>
-
-                        <!-- ===== STUDENT ONLY ===== -->
-                        <!-- TODO: Wrap in @if (User.IsInRole("Student")) { } -->
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Enrollments" asp-action="MyCourses">My Courses</a>
-                        </li>
-
-                        <!-- ===== ADMIN DASHBOARD (Optional) ===== -->
-                        <!-- TODO: Wrap in @if (User.IsInRole("Admin")) { } -->
-                        <!--
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Admin" asp-action="Index">Admin Panel</a>
-                        </li>
-                        -->
+                        <!-- STUDENT: Can view their courses and grades -->
+                        @if (User.IsInRole("Student"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-area="" asp-controller="Student" asp-action="MyCourses">My Courses</a>
+                            </li>
+                        }
                     </ul>
 
                     <!-- Login/Register partial (comes with Identity) -->

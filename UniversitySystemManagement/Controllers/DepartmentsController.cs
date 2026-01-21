@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace UniversitySystemManagement.Controllers
 {
+    // Only Admin can manage departments
+    [Authorize(Roles = "Admin")]
     public class DepartmentsController : Controller
     {
         private readonly ApplicationDbContext _context;

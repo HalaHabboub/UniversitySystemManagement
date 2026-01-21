@@ -1,0 +1,46 @@
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<h1>Admin Dashboard</h1>
+<hr />
+
+<!-- Quick stats cards -->
+<div class="row">
+    <div class="col-md-4">
+        <div class="card text-white bg-primary mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Total Users</h5>
+                <p class="card-text display-4">@ViewBag.UserCount</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-success mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Total Roles</h5>
+                <p class="card-text display-4">@ViewBag.RoleCount</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick links -->
+<h4>Quick Actions</h4>
+<div class="list-group" style="max-width: 400px;">
+    <a asp-action="Users" class="list-group-item list-group-item-action">
+        Manage Users
+    </a>
+    <a asp-controller="Departments" asp-action="Index" class="list-group-item list-group-item-action">
+        Manage Departments
+    </a>
+    <a asp-controller="Courses" asp-action="Index" class="list-group-item list-group-item-action">
+        Manage Courses
+    </a>
+    <a asp-controller="Instructors" asp-action="Index" class="list-group-item list-group-item-action">
+        Manage Instructors
+    </a>
+    <a asp-controller="Students" asp-action="Index" class="list-group-item list-group-item-action">
+        Manage Students
+    </a>
+</div>
