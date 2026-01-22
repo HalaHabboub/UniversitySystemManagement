@@ -1,0 +1,59 @@
+@model IEnumerable<UniversitySystemManagement.Models.Course>
+
+@{
+    ViewData["Title"] = "Instructor Dashboard";
+    var instructor = ViewBag.Instructor as UniversitySystemManagement.Models.Instructor;
+}
+
+<h1>Welcome, @instructor?.FullName()</h1>
+<p class="text-muted">@instructor?.Department?.Name Department</p>
+<hr />
+
+<!-- Stats -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card text-white bg-primary">
+            <div class="card-body text-center">
+                <h6>My Courses</h6>
+                <p class="display-6">@ViewBag.CourseCount</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-success">
+            <div class="card-body text-center">
+                <h6>Total Students</h6>
+                <p class="display-6">@ViewBag.TotalStudents</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Course list -->
+<h4>My Courses</h4>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Course</th>
+            <th>Department</th>
+            <th>Credits</th>
+            <th>Enrolled Students</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var course in Model)
+        {
+            <tr>
+                <td>@course.Title</td>
+                <td>@course.Department?.Name</td>
+                <td>@course.Credits</td>
+                <td>@course.Enrollments.Count</td>
+                <td>
+                    <a asp-action="CourseDetails" asp-route-id="@course.CourseId" class="btn btn-sm btn-info">Details</a>
+                    <a asp-action="CourseStudents" asp-route-id="@course.CourseId" class="btn btn-sm btn-primary">Students & Grades</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

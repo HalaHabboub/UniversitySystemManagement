@@ -1,0 +1,96 @@
+@model IEnumerable<UniversitySystemManagement.Models.Enrollment>
+
+@{
+    ViewData["Title"] = "My Courses";
+    var student = ViewBag.Student as UniversitySystemManagement.Models.Student;
+    decimal gpa = ViewBag.GPA;
+}
+
+<h1>Welcome, @student?.FullName()</h1>
+<p class="text-muted">Student since @student?.EnrollmentDate.ToString("MMMM yyyy")</p>
+<hr />
+
+<!-- Quick stats -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card text-white bg-primary">
+            <div class="card-body text-center">
+                <h6>Enrolled Courses</h6>
+                <p class="display-6">@Model.Count()</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-success">
+            <div class="card-body text-center">
+                <h6>Current GPA</h6>
+                <p class="display-6">@gpa.ToString("F2")</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h4>My Enrolled Courses</h4>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Course</th>
+            <th>Department</th>
+            <th>Instructor</th>
+            <th>Credits</th>
+            <th>Mark</th>
+            <th>Grade</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var enrollment in Model)
+        {
+            <tr>
+                <td>@enrollment.Course?.Title</td>
+                <td>@enrollment.Course?.Department?.Name</td>
+                <td>@enrollment.Course?.Instructor?.FullName()</td>
+                <td>@enrollment.Course?.Credits</td>
+                <td>
+                    @if (enrollment.Mark.HasValue)
+                    {
+                        <span>@enrollment.Mark.Value.ToString("F1")</span>
+                    }
+                    else
+                    {
+                        <span class="text-muted">Pending</span>
+                    }
+                </td>
+                <td>
+                    @if (enrollment.Mark.HasValue)
+                    {
+                        var grade = enrollment.Mark.Value switch
+                        {
+                            >= 90 => "A",
+                            >= 85 => "A-",
+                            >= 80 => "B+",
+                            >= 75 => "B",
+                            >= 70 => "B-",
+                            >= 65 => "C+",
+                            >= 60 => "C",
+                            >= 55 => "C-",
+                            >= 50 => "D",
+                            _ => "F"
+                        };
+                        <span class="badge @(enrollment.Mark >= 60 ? "bg-success" : "bg-danger")">@grade</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">-</span>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">You are not enrolled in any courses yet.</div>
+}
+
+<a asp-action="MyGPA" class="btn btn-info">View Detailed GPA</a>

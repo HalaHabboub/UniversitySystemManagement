@@ -1,0 +1,39 @@
+@model IEnumerable<UniversitySystemManagement.Models.Course>
+
+@{
+    ViewData["Title"] = "My Courses";
+}
+
+<h1>My Courses</h1>
+<hr />
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Course</th>
+            <th>Description</th>
+            <th>Department</th>
+            <th>Credits</th>
+            <th>Enrolled</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var course in Model)
+        {
+            <tr>
+                <td>@course.Title</td>
+                <td>@(course.Description ?? "-")</td>
+                <td>@course.Department?.Name</td>
+                <td>@course.Credits</td>
+                <td>@course.Enrollments.Count students</td>
+                <td>
+                    <a asp-action="CourseDetails" asp-route-id="@course.CourseId" class="btn btn-sm btn-info">Details</a>
+                    <a asp-action="CourseStudents" asp-route-id="@course.CourseId" class="btn btn-sm btn-primary">Manage Students</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="Dashboard" class="btn btn-secondary">Back to Dashboard</a>

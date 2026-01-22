@@ -2,39 +2,44 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using UniversitySystemManagement.Data;
 
 namespace UniversitySystemManagement.Controllers
 {
-    // Only users with Admin role can access this controller
     [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly ApplicationDbContext _context;
 
-        // Inject UserManager and RoleManager via constructor
-        public AdminController(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
+        public AdminController(
+            UserManager<IdentityUser> userManager,
+            RoleManager<IdentityRole> roleManager,
+            ApplicationDbContext context)
         {
             _userManager = userManager;
             _roleManager = roleManager;
+            _context = context;
         }
 
         // GET: Admin/Dashboard
         public async Task<IActionResult> Dashboard()
         {
-            // Pass counts to view for quick stats
             ViewBag.UserCount = await _userManager.Users.CountAsync();
             ViewBag.RoleCount = await _roleManager.Roles.CountAsync();
+            ViewBag.StudentCount = await _context.Students.CountAsync();
+            ViewBag.InstructorCount = await _context.Instructors.CountAsync();
+            ViewBag.CourseCount = await _context.Courses.CountAsync();
             return View();
         }
 
-        // GET: Admin/Users - List all users with their roles
+        // GET: Admin/Users
         public async Task<IActionResult> Users()
         {
             var users = await _userManager.Users.ToListAsync();
-
-            // Build a list of users with their roles for the view
             var userRoles = new List<(IdentityUser User, IList<string> Roles)>();
+
             foreach (var user in users)
             {
                 var roles = await _userManager.GetRolesAsync(user);
@@ -55,6 +60,11 @@ namespace UniversitySystemManagement.Controllers
                 return NotFound();
 
             ViewBag.Roles = await _userManager.GetRolesAsync(user);
+            ViewBag.Student = await _context.Students.FirstOrDefaultAsync(s => s.UserId == id);
+            ViewBag.Instructor = await _context.Instructors
+                .Include(i => i.Department)
+                .FirstOrDefaultAsync(i => i.UserId == id);
+
             return View(user);
         }
 
@@ -68,17 +78,16 @@ namespace UniversitySystemManagement.Controllers
             if (user == null)
                 return NotFound();
 
-            //we are using ViewBag to pass data to the view
-            // User ID and Email for display
             ViewBag.UserId = user.Id;
             ViewBag.UserEmail = user.Email;
             ViewBag.CurrentRoles = await _userManager.GetRolesAsync(user);
-            ViewBag.AllRoles = await _roleManager.Roles.Select(r => r.Name).ToListAsync();
+            // Only show Student and Instructor roles (Admin role is not assignable via UI)
+            ViewBag.AllRoles = new List<string> { "Student", "Instructor" };
 
             return View();
         }
 
-        // POST: Admin/SetRole
+        // POST: Admin/SetRole - Only assigns role, user completes profile on first login
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SetRole(string userId, string role)
@@ -87,11 +96,11 @@ namespace UniversitySystemManagement.Controllers
             if (user == null)
                 return NotFound();
 
-            // Remove all current roles first
+            // Remove current roles
             var currentRoles = await _userManager.GetRolesAsync(user);
             await _userManager.RemoveFromRolesAsync(user, currentRoles);
 
-            // Assign the new role
+            // Assign new role (profile will be created when user logs in)
             if (!string.IsNullOrEmpty(role))
             {
                 await _userManager.AddToRoleAsync(user, role);
@@ -109,14 +118,22 @@ namespace UniversitySystemManagement.Controllers
             if (user == null)
                 return NotFound();
 
-            // Prevent deleting yourself
             if (user.Email == User.Identity?.Name)
             {
                 TempData["Error"] = "You cannot delete your own account.";
                 return RedirectToAction(nameof(Users));
             }
 
+            // Delete linked Student/Instructor records
+            var student = await _context.Students.FirstOrDefaultAsync(s => s.UserId == id);
+            if (student != null) _context.Students.Remove(student);
+
+            var instructor = await _context.Instructors.FirstOrDefaultAsync(i => i.UserId == id);
+            if (instructor != null) _context.Instructors.Remove(instructor);
+
+            await _context.SaveChangesAsync();
             await _userManager.DeleteAsync(user);
+
             return RedirectToAction(nameof(Users));
         }
     }

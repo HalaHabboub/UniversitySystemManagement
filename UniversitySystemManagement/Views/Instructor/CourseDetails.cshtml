@@ -1,0 +1,49 @@
+@model UniversitySystemManagement.Models.Course
+
+@{
+    ViewData["Title"] = "Course Details";
+}
+
+<h1>@Model.Title</h1>
+<hr />
+
+<dl class="row">
+    <dt class="col-sm-3">Description</dt>
+    <dd class="col-sm-9">@(Model.Description ?? "No description")</dd>
+
+    <dt class="col-sm-3">Department</dt>
+    <dd class="col-sm-9">@Model.Department?.Name</dd>
+
+    <dt class="col-sm-3">Credits</dt>
+    <dd class="col-sm-9">@Model.Credits</dd>
+
+    <dt class="col-sm-3">Enrolled Students</dt>
+    <dd class="col-sm-9">@Model.Enrollments.Count</dd>
+</dl>
+
+<h4>Enrolled Students</h4>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Student Name</th>
+            <th>Email</th>
+            <th>Mark</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var enrollment in Model.Enrollments)
+        {
+            <tr>
+                <td>@enrollment.Student?.FullName()</td>
+                <td>@enrollment.Student?.Email</td>
+                <td>@(enrollment.Mark?.ToString("F1") ?? "Not graded")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div>
+    <a asp-action="CourseStudents" asp-route-id="@Model.CourseId" class="btn btn-primary">Manage Grades</a>
+    <a asp-action="EnrollStudent" asp-route-id="@Model.CourseId" class="btn btn-success">Enroll Student</a>
+    <a asp-action="Dashboard" class="btn btn-secondary">Back</a>
+</div>

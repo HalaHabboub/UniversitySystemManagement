@@ -1,0 +1,60 @@
+@model UniversitySystemManagement.Models.Course
+
+@{
+    ViewData["Title"] = "Manage Students - " + Model.Title;
+}
+
+<h1>@Model.Title - Students & Grades</h1>
+<hr />
+
+<p>
+    <a asp-action="EnrollStudent" asp-route-id="@Model.CourseId" class="btn btn-success">Enroll New Student</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Student Name</th>
+            <th>Email</th>
+            <th>Current Mark</th>
+            <th>Update Mark</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var enrollment in Model.Enrollments)
+        {
+            <tr>
+                <td>@enrollment.Student?.FullName()</td>
+                <td>@enrollment.Student?.Email</td>
+                <td>
+                    @if (enrollment.Mark.HasValue)
+                    {
+                        <span class="badge bg-primary">@enrollment.Mark.Value.ToString("F1")</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">Not graded</span>
+                    }
+                </td>
+                <td>
+                    <!-- Inline form to update mark -->
+                    <form asp-action="UpdateMark" method="post" class="d-flex gap-2">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="courseId" value="@Model.CourseId" />
+                        <input type="hidden" name="studentId" value="@enrollment.StudentId" />
+                        <input type="number" name="mark" value="@enrollment.Mark"
+                               min="0" max="100" step="0.1" class="form-control" style="width: 80px;" />
+                        <button type="submit" class="btn btn-sm btn-primary">Save</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (!Model.Enrollments.Any())
+{
+    <div class="alert alert-info">No students enrolled in this course yet.</div>
+}
+
+<a asp-action="Dashboard" class="btn btn-secondary">Back to Dashboard</a>

@@ -7,6 +7,9 @@ namespace UniversitySystemManagement.Models
     {
         public int Id { get; set; }
 
+        // Links to IdentityUser.Id - set when Admin assigns role
+        public string? UserId { get; set; }
+
         [Required, MaxLength(100)]
         public string FirstName { get; set; } = string.Empty;
 
