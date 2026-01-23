@@ -125,39 +125,7 @@ namespace UniversitySystemManagement.Controllers
             return View(instructor);
         }
 
-        // GET: Instructors/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var instructor = await _context.Instructors
-                .Include(i => i.Department)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (instructor == null)
-            {
-                return NotFound();
-            }
-
-            return View(instructor);
-        }
-
-        // POST: Instructors/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var instructor = await _context.Instructors.FindAsync(id);
-            if (instructor != null)
-            {
-                _context.Instructors.Remove(instructor);
-            }
-
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+        // DELETE functionality removed
 
         private bool InstructorExists(int id)
         {

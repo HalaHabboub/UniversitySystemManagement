@@ -1,118 +1,113 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - XYZ University Portal</title>
+    <title>@ViewData["Title"] - XYZ University</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/UniversityManagementSystem.styles.css" asp-append-version="true" />
-
-    <!-- Custom University Theme Styles -->
-    <style>
-        :root {
-            --university-primary: #1E3A5F;
-            --university-secondary: #2E5A8F;
-            --university-accent: #3E7AB0;
-        }
-
-        .bg-university {
-            background-color: var(--university-primary) !important;
-        }
-
-        .navbar-brand {
-            font-weight: bold;
-            font-size: 1.4rem;
-        }
-
-        .footer {
-            background-color: var(--university-primary);
-            color: white;
-        }
-
-        .nav-link:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
-        }
-    </style>
 </head>
 <body>
+    <!-- Header -->
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark" style="background-color: #1E3A5F;">
-            <div class="container-fluid">
+        <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
+            <div class="container">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
-                    🎓 XYZ University Portal
+                    <span style="font-size: 1.8rem;">&#127891;</span> XYZ University
                 </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
+                        aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <!-- PUBLIC: Everyone can see Home -->
+                <div class="collapse navbar-collapse" id="mainNavbar">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="About">About</a>
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="About">About</a>
                         </li>
 
-                        <!-- ADMIN ONLY: Full management access -->
                         @if (User.IsInRole("Admin"))
                         {
-                            <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="" asp-controller="Admin" asp-action="Dashboard">Admin Panel</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="" asp-controller="Courses" asp-action="Index">Courses</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="" asp-controller="Departments" asp-action="Index">Departments</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="" asp-controller="Instructors" asp-action="Index">Instructors</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="" asp-controller="Students" asp-action="Index">Students</a>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Admin
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" asp-controller="Admin" asp-action="Dashboard">Dashboard</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" asp-controller="Admin" asp-action="Users">Users</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Departments" asp-action="Index">Departments</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Courses" asp-action="Index">Courses</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Instructors" asp-action="Index">Instructors</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Students" asp-action="Index">Students</a></li>
+                                </ul>
                             </li>
                         }
 
-                        <!-- INSTRUCTOR: Can view their students -->
                         @if (User.IsInRole("Instructor"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="" asp-controller="Instructor" asp-action="Dashboard">My Dashboard</a>
+                                <a class="nav-link" asp-controller="Instructor" asp-action="Dashboard">My Dashboard</a>
                             </li>
                         }
 
-                        <!-- STUDENT: Can view their courses and grades -->
                         @if (User.IsInRole("Student"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="" asp-controller="Student" asp-action="MyCourses">My Courses</a>
+                                <a class="nav-link" asp-controller="Student" asp-action="MyCourses">My Courses</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="" asp-controller="Student" asp-action="MyGPA">My GPA</a>
+                                <a class="nav-link" asp-controller="Student" asp-action="MyGPA">My GPA</a>
                             </li>
                         }
                     </ul>
-
-                    <!-- Login/Register partial (comes with Identity) -->
                     <partial name="_LoginPartial" />
                 </div>
             </div>
         </nav>
     </header>
 
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+    <!-- Main Content -->
+    <main role="main">
+        @RenderBody()
+    </main>
 
-    <footer class="footer text-muted py-3 mt-4" style="background-color: #1E3A5F;">
-        <div class="container text-center">
-            <span style="color: white;">&copy; @DateTime.Now.Year - XYZ University Portal | Academic Management System</span>
+    <!-- Footer -->
+    <footer class="footer-custom">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4 mb-lg-0">
+                    <h5><span style="font-size: 1.5rem;">&#127891;</span> XYZ University</h5>
+                    <p>Empowering students with knowledge and skills for a brighter future since 1950.</p>
+                </div>
+                <div class="col-lg-2 col-md-4 mb-4 mb-md-0">
+                    <h5>Quick Links</h5>
+                    <ul class="footer-links">
+                        <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+                        <li><a asp-controller="Home" asp-action="About">About</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-4 mb-4 mb-md-0">
+                    <h5>Resources</h5>
+                    <ul class="footer-links">
+                        <li><a href="#">Library</a></li>
+                        <li><a href="#">Research</a></li>
+                        <li><a href="#">Career Services</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-4">
+                    <h5>Contact Us</h5>
+                    <p class="mb-1">123 University Avenue</p>
+                    <p class="mb-1">Amman, Jordan</p>
+                    <p class="mb-1">info&#64;xyz.edu.jo</p>
+                </div>
+            </div>
+            <div class="footer-bottom text-center">
+                <p class="mb-0">&copy; @DateTime.Now.Year XYZ University. Made by <a href="https://www.linkedin.com/in/hala-habboub-3a5b811b8/">Hala Habboub</a>.</p>
+            </div>
         </div>
     </footer>
 

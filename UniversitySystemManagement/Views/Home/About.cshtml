@@ -1,22 +1,132 @@
-﻿@{
+@{
     ViewData["Title"] = "About";
 }
-<h1>@ViewData["Title"]</h1>
 
-<p>Our Departments and Instructors</p>
+<!-- Hero Section -->
+<section class="hero-section" style="padding: 3rem 0;">
+    <div class="container position-relative text-center">
+        <h1>About XYZ University</h1>
+        <p class="mb-0">Discover our legacy of excellence in education since 1950</p>
+    </div>
+</section>
 
-<table class="table table-striped">
+<!-- About Content -->
+<section class="py-5">
+    <div class="container">
+        <div class="row align-items-center mb-5">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <h2 class="section-title">Our Story</h2>
+                <p class="text-muted">
+                    Founded in 1950, XYZ University has been at the forefront of academic excellence
+                    for over seven decades. What started as a small institution with a handful of
+                    dedicated educators has grown into a comprehensive university serving thousands
+                    of students from around the world.
+                </p>
+                <p class="text-muted">
+                    Our commitment to innovation, research, and student success has made us one of
+                    the leading educational institutions in the region. We continue to evolve and
+                    adapt to meet the changing needs of our students and society.
+                </p>
+            </div>
+            <div class="col-lg-6">
+                <div class="row g-3">
+                    <div class="col-6">
+                        <div class="feature-card text-center">
+                            <h3 class="text-primary-custom mb-1" style="font-size: 2.5rem; font-weight: 700;">70+</h3>
+                            <p class="text-muted mb-0">Years of Excellence</p>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="feature-card text-center">
+                            <h3 class="text-primary-custom mb-1" style="font-size: 2.5rem; font-weight: 700;">50+</h3>
+                            <p class="text-muted mb-0">Programs</p>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="feature-card text-center">
+                            <h3 class="text-primary-custom mb-1" style="font-size: 2.5rem; font-weight: 700;">5000+</h3>
+                            <p class="text-muted mb-0">Students</p>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="feature-card text-center">
+                            <h3 class="text-primary-custom mb-1" style="font-size: 2.5rem; font-weight: 700;">200+</h3>
+                            <p class="text-muted mb-0">Faculty Members</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-    <thead>
-        <tr>
-            <th>Department</th>
-            <th>Instructors</th>
-        </tr>
-    </thead>
-    <tbody id="DepartmentsBody">
-        <!-- Data will be populated here via JavaScript -->
-    </tbody>
-</table>
+<!-- Mission & Values -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="section-title">Our Mission & Values</h2>
+            <p class="section-subtitle">Guiding principles that shape our institution</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="feature-card h-100">
+                    <div class="feature-icon">
+                        <span style="color: white;">&#127919;</span>
+                    </div>
+                    <h3>Excellence</h3>
+                    <p>We strive for the highest standards in teaching, research, and service to our community.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card h-100">
+                    <div class="feature-icon">
+                        <span style="color: white;">&#129309;</span>
+                    </div>
+                    <h3>Integrity</h3>
+                    <p>We uphold honesty, ethics, and transparency in all our academic and professional endeavors.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card h-100">
+                    <div class="feature-icon">
+                        <span style="color: white;">&#127760;</span>
+                    </div>
+                    <h3>Innovation</h3>
+                    <p>We embrace creativity and forward-thinking approaches to solve tomorrow's challenges.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Departments & Instructors Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="section-title">Our Departments</h2>
+            <p class="section-subtitle">Meet the talented faculty leading our academic programs</p>
+        </div>
+        <div class="card shadow border-0">
+            <div class="card-header py-3">
+                <h5 class="mb-0">Departments & Instructors</h5>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-striped mb-0">
+                    <thead>
+                        <tr>
+                            <th class="ps-4">Department</th>
+                            <th>Instructors</th>
+                        </tr>
+                    </thead>
+                    <tbody id="DepartmentsBody">
+                        <!-- Data will be populated here via JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
 <script>
     fetch("https://localhost:7069/api/Departments")
         .then(response => response.json())

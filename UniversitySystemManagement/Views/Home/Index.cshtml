@@ -1,8 +1,86 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+@{
+    ViewData["Title"] = "Welcome";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container position-relative">
+        <div class="row align-items-center">
+            <div class="col-lg-8 mx-auto text-center">
+                <h1>Welcome to XYZ University</h1>
+                <p>Discover excellence in education. Join thousands of students pursuing their dreams with world-class faculty and cutting-edge programs.</p>
+                <div class="d-flex gap-3 justify-content-center flex-wrap">
+                    @if (!User.Identity.IsAuthenticated)
+                    {
+                        <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-hero-primary">Get Started</a>
+                        <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-hero-outline">Sign In</a>
+                    }
+                    else
+                    {
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <a asp-controller="Admin" asp-action="Dashboard" class="btn btn-hero-primary">Go to Dashboard</a>
+                        }
+                        else if (User.IsInRole("Instructor"))
+                        {
+                            <a asp-controller="Instructor" asp-action="Dashboard" class="btn btn-hero-primary">My Dashboard</a>
+                        }
+                        else if (User.IsInRole("Student"))
+                        {
+                            <a asp-controller="Student" asp-action="MyCourses" class="btn btn-hero-primary">My Courses</a>
+                        }
+                        <a asp-controller="Home" asp-action="About" class="btn btn-hero-outline">Learn More</a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features-section">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="section-title">Why Choose XYZ University?</h2>
+            <p class="section-subtitle">We provide the tools and environment for your academic success</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <span style="color: white;">&#128218;</span>
+                    </div>
+                    <h3>Quality Education</h3>
+                    <p>Accredited programs designed to prepare you for real-world challenges and opportunities.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <span style="color: white;">&#128100;</span>
+                    </div>
+                    <h3>Expert Faculty</h3>
+                    <p>Learn from industry professionals and researchers dedicated to your success.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <span style="color: white;">&#128187;</span>
+                    </div>
+                    <h3>Modern Facilities</h3>
+                    <p>State-of-the-art labs, libraries, and learning spaces to enhance your experience.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <span style="color: white;">&#127942;</span>
+                    </div>
+                    <h3>Career Support</h3>
+                    <p>Comprehensive career services to help you land your dream job after graduation.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

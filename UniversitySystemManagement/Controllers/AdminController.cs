@@ -109,32 +109,6 @@ namespace UniversitySystemManagement.Controllers
             return RedirectToAction(nameof(Users));
         }
 
-        // POST: Admin/DeleteUser
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteUser(string id)
-        {
-            var user = await _userManager.FindByIdAsync(id);
-            if (user == null)
-                return NotFound();
-
-            if (user.Email == User.Identity?.Name)
-            {
-                TempData["Error"] = "You cannot delete your own account.";
-                return RedirectToAction(nameof(Users));
-            }
-
-            // Delete linked Student/Instructor records
-            var student = await _context.Students.FirstOrDefaultAsync(s => s.UserId == id);
-            if (student != null) _context.Students.Remove(student);
-
-            var instructor = await _context.Instructors.FirstOrDefaultAsync(i => i.UserId == id);
-            if (instructor != null) _context.Instructors.Remove(instructor);
-
-            await _context.SaveChangesAsync();
-            await _userManager.DeleteAsync(user);
-
-            return RedirectToAction(nameof(Users));
-        }
+        // DELETE functionality removed
     }
 }
