@@ -1,0 +1,38 @@
+﻿@{
+    ViewData["Title"] = "About";
+}
+<h1>@ViewData["Title"]</h1>
+
+<p>Our Departments and Instructors</p>
+
+<table class="table table-striped">
+
+    <thead>
+        <tr>
+            <th>Department</th>
+            <th>Instructors</th>
+        </tr>
+    </thead>
+    <tbody id="DepartmentsBody">
+        <!-- Data will be populated here via JavaScript -->
+    </tbody>
+</table>
+<script>
+    fetch("https://localhost:7069/api/Departments")
+        .then(response => response.json())
+        .then(data => {
+            const tbody = document.getElementById("DepartmentsBody");
+            data.forEach(dept => {
+                const row = document.createElement("tr");
+                const instructorNames = dept.instructors
+                    .map(instr => `${instr.firstName} ${instr.lastName}`)
+                    .join(", ");
+                row.innerHTML = `
+                    <td>${dept.name}</td>
+                    <td>${instructorNames || "No instructors"}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        })
+        .catch(error => console.error('Error fetching departments:', error));
+</script>
