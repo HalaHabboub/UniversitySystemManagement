@@ -1,0 +1,53 @@
+@model UniversitySystemManagement.Models.StudentCard
+
+@{
+    ViewData["Title"] = "My Student Card";
+    var student = ViewBag.Student as UniversitySystemManagement.Models.Student;
+}
+
+<h1>My Student Card</h1>
+<p class="text-muted">View and manage your student identification card</p>
+<hr />
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Student ID Card</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <strong>Student Name:</strong>
+                    <p class="mb-0">@student?.FullName()</p>
+                </div>
+                <div class="mb-3">
+                    <strong>Card Number:</strong>
+                    <p class="mb-0">@Model.CardNumber</p>
+                </div>
+                <div class="mb-3">
+                    <strong>Issue Date:</strong>
+                    <p class="mb-0">@Model.IssueDate.ToString("MMMM dd, yyyy")</p>
+                </div>
+                <div class="mb-3">
+                    <strong>Expiry Date:</strong>
+                    <p class="mb-0">@Model.ExpiryDate.ToString("MMMM dd, yyyy")</p>
+                </div>
+                <div class="mb-3">
+                    <strong>Status:</strong>
+                    @if (Model.IsActive)
+                    {
+                        <span class="badge bg-success">Active</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">Inactive</span>
+                    }
+                </div>
+            </div>
+            <div class="card-footer">
+                <a asp-action="EditCard" class="btn btn-warning">Edit Card</a>
+                <a asp-action="MyCourses" class="btn btn-secondary">Back to Courses</a>
+            </div>
+        </div>
+    </div>
+</div>

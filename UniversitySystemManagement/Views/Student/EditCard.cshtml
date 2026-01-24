@@ -1,0 +1,46 @@
+@model UniversitySystemManagement.Models.StudentCard
+
+@{
+    ViewData["Title"] = "Edit Student Card";
+    var student = ViewBag.Student as UniversitySystemManagement.Models.Student;
+}
+
+<h1>Edit Student Card</h1>
+<p class="text-muted">Update your card status</p>
+<hr />
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-header bg-warning">
+                <h5 class="mb-0">Card Status for @student?.FullName()</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <strong>Card Number:</strong>
+                    <p class="mb-0 text-muted">@Model.CardNumber</p>
+                </div>
+                <div class="mb-3">
+                    <strong>Issue Date:</strong>
+                    <p class="mb-0 text-muted">@Model.IssueDate.ToString("MMMM dd, yyyy")</p>
+                </div>
+                <div class="mb-3">
+                    <strong>Expiry Date:</strong>
+                    <p class="mb-0 text-muted">@Model.ExpiryDate.ToString("MMMM dd, yyyy")</p>
+                </div>
+                <hr />
+                <form asp-action="EditCard" method="post">
+                    <div class="mb-3 form-check form-switch">
+                        <input type="checkbox" class="form-check-input" id="isActive" name="isActive"
+                               value="true" @(Model.IsActive ? "checked" : "") style="transform: scale(1.5);" />
+                        <label class="form-check-label ms-2" for="isActive">
+                            Card is @(Model.IsActive ? "Active" : "Inactive")
+                        </label>
+                    </div>
+                    <button type="submit" class="btn btn-warning">Save Changes</button>
+                    <a asp-action="MyCard" class="btn btn-secondary">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

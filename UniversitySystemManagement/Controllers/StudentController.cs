@@ -140,5 +140,116 @@ namespace UniversitySystemManagement.Controllers
                 _ => 0.0m
             };
         }
+
+        // GET: Student/MyCard
+        public async Task<IActionResult> MyCard()
+        {
+            var student = await _context.Students
+                .Include(s => s.StudentCard)
+                .FirstOrDefaultAsync(s => s.UserId == GetCurrentUserId());
+
+            if (student == null)
+                return RedirectToAction(nameof(CompleteProfile));
+
+            // If no card exists, redirect to create
+            if (student.StudentCard == null)
+                return RedirectToAction(nameof(CreateCard));
+
+            ViewBag.Student = student;
+            return View(student.StudentCard);
+        }
+
+        // GET: Student/CreateCard
+        public async Task<IActionResult> CreateCard()
+        {
+            var student = await _context.Students
+                .Include(s => s.StudentCard)
+                .FirstOrDefaultAsync(s => s.UserId == GetCurrentUserId());
+
+            if (student == null)
+                return RedirectToAction(nameof(CompleteProfile));
+
+            // If card already exists, redirect to view it
+            if (student.StudentCard != null)
+                return RedirectToAction(nameof(MyCard));
+
+            ViewBag.Student = student;
+            return View();
+        }
+
+        // POST: Student/CreateCard
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateCard(bool confirm)
+        {
+            var student = await _context.Students
+                .Include(s => s.StudentCard)
+                .FirstOrDefaultAsync(s => s.UserId == GetCurrentUserId());
+
+            if (student == null)
+                return RedirectToAction(nameof(CompleteProfile));
+
+            // If card already exists, redirect to view it
+            if (student.StudentCard != null)
+                return RedirectToAction(nameof(MyCard));
+
+            // Auto-generate card details
+            var issueDate = DateTime.Now;
+            var cardNumber = $"STU-{issueDate:yyyyMMdd}-{student.Id:D4}";
+
+            var studentCard = new StudentCard
+            {
+                StudentId = student.Id,
+                CardNumber = cardNumber,
+                IssueDate = issueDate,
+                ExpiryDate = issueDate.AddYears(1),
+                IsActive = true
+            };
+
+            _context.StudentCards.Add(studentCard);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(MyCard));
+        }
+
+        // GET: Student/EditCard
+        public async Task<IActionResult> EditCard()
+        {
+            var student = await _context.Students
+                .Include(s => s.StudentCard)
+                .FirstOrDefaultAsync(s => s.UserId == GetCurrentUserId());
+
+            if (student == null)
+                return RedirectToAction(nameof(CompleteProfile));
+
+            // If no card exists, redirect to create
+            if (student.StudentCard == null)
+                return RedirectToAction(nameof(CreateCard));
+
+            ViewBag.Student = student;
+            return View(student.StudentCard);
+        }
+
+        // POST: Student/EditCard
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditCard(bool isActive)
+        {
+            var student = await _context.Students
+                .Include(s => s.StudentCard)
+                .FirstOrDefaultAsync(s => s.UserId == GetCurrentUserId());
+
+            if (student == null)
+                return RedirectToAction(nameof(CompleteProfile));
+
+            if (student.StudentCard == null)
+                return RedirectToAction(nameof(CreateCard));
+
+            student.StudentCard.IsActive = isActive;
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(MyCard));
+        }
     }
 }

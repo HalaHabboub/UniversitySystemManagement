@@ -1,0 +1,35 @@
+@{
+    ViewData["Title"] = "Generate Student Card";
+    var student = ViewBag.Student as UniversitySystemManagement.Models.Student;
+}
+
+<h1>Generate Student Card</h1>
+<p class="text-muted">Create your student identification card</p>
+<hr />
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">New Student Card</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Student:</strong> @student?.FullName()</p>
+                <p><strong>Email:</strong> @student?.Email</p>
+                <hr />
+                <p>Click the button below to generate your student card. The following will be set automatically:</p>
+                <ul>
+                    <li><strong>Card Number:</strong> Auto-generated unique ID</li>
+                    <li><strong>Issue Date:</strong> Today's date</li>
+                    <li><strong>Expiry Date:</strong> 1 year from today</li>
+                    <li><strong>Status:</strong> Active</li>
+                </ul>
+                <form asp-action="CreateCard" method="post">
+                    <input type="hidden" name="confirm" value="true" />
+                    <button type="submit" class="btn btn-primary btn-lg">Generate My Card</button>
+                    <a asp-action="MyCourses" class="btn btn-secondary">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
