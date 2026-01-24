@@ -40,4 +40,4 @@ dotnet run
 
 ## Related Projects
 
-- [UniAPI](../UniAPI) - REST API providing department and instructor endpoints
+- [UniAPI](https://github.com/HalaHabboub/UniAPI) - REST API providing department and instructor endpoints
